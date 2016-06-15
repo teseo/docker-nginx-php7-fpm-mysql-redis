@@ -17,7 +17,7 @@ php7:
   image: teseo/php7
   container_name: php7
   volumes:
-    - ./app:/var/www
+    - ${PWD}/app:/var/www
   ports:
     - "9000:9000"
   links:
@@ -33,7 +33,7 @@ web:
   links:
     - php7:php7
   volumes:
-    - ./app:/var/www
+    - ${PWD}/app:/var/www
     - ./sites:/etc/nginx/conf.d
   #  - ${PWD}/logs/nginx:/var/log:rw
 
