@@ -1,0 +1,46 @@
+cache:
+  image: redis
+  container_name: cache
+  ports:
+    - "6379:6379"
+mysql:
+  image: mysql
+  container_name: db
+  volumes:
+      - ${PWD}/logs/mysql:/var/log:rw
+  ports:
+    - "3306:3306"
+  environment:
+    MYSQL_ROOT_PASSWORD: password
+
+php7:
+  image: teseo/php7
+  container_name: php7
+  volumes:
+    - ./app:/var/www
+  ports:
+    - "9000:9000"
+  links:
+    - mysql:mysql
+    - cache:cache
+  #  - ${PWD}/logs/php7:/var/log:rw
+web:
+  image: teseo/nginx
+  container_name: web
+  ports:
+    - "80:80"
+    - "443:443"
+  links:
+    - php7:php7
+  volumes:
+    - ./app:/var/www
+    - ./sites:/etc/nginx/conf.d
+  #  - ${PWD}/logs/nginx:/var/log:rw
+
+#
+# search:
+#   image: elasticsearch
+#   container_name: search
+#   ports:
+#     - "9200:9200"
+#     - "9300:9300"
